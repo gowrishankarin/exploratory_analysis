@@ -34,6 +34,9 @@ load <- function(file = "household_power_consumption.txt") {
     library(data.table)
     library(dplyr)
     library(lubridate)
+    library(plyr)
+    library(reshape2)
+    library(ggplot2)
     
     # Chain it, Cache It
     # Read data file and account not available entries as "?" with column 
