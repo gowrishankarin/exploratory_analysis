@@ -1,10 +1,20 @@
-compare_utility_meters <- function() {
+compare_utility_meters <- function(meter, sub, period) {
     # Draw a line graph for DateTime and sub meter 1's utilization
-    with(final, plot(Date, m1, type="l", xlab = "", ylab = "Energy sub metering"))
+    p <- qplot(
+        Date, meter, data = final,
+        geom = c("point", "smooth"), method = "loess",
+        formula = y~x, color = Date, size  = 2,
+        xlab = paste("Analysis Period ", period), 
+        ylab = "Active Energy Consumption in Watt-Hour",
+        main = "Individual household energy utilization"
+        
+    )
     
-    # Add lines for sub meter 2 and 3
-    with(final, lines(Date, m2, type="l", col="red"))
-    with(final, lines(Date, m3, type="l", col="blue"))
+    main_title <- "Individual household energy utilization"
+    
+    title <- ggtitle(bquote(atop(.(main_title), atop(italic(.(sub))), "")))
+    
+    print(p + title)
     
     # Add a legend @ top right corner.
 #   legend("topright", lwd=1, lty=1, col = c("black", "blue", "red"), box.lwd = 1, 
@@ -14,8 +24,21 @@ compare_utility_meters <- function() {
 # Get the cached data laoded through load.R
 data <- cacheHPCData(pFunc)
 
-data <- filter(data, Date >= as.Date("2007-01-01") & 
-    Date <= as.Date("2007-01-31")) 
+print("Enter the start and end date for analysis.")
+print("Data is collected for a period of 4 years between 2007-01-01 and 2010-12-30")
+print("This program does not conduct error check on input data. Please feed them in mentioned format")
+
+start_date <- readline("Enter START date in yyyy-mm-dd format: ")
+end_date <- readline("Enter END date in yyyy-mm-dd format: ")
+
+data <- filter(data, Date >= as.Date(start_date) & 
+    Date <= as.Date(end_date)) 
+
+period <- paste(start_date, " to ", end_date)
+
+start <- gsub("-", x=start_date, "")
+print(start)
+end <- gsub("-", x=end_date, "")
 
 new_data <- ddply(
 	data,
@@ -62,7 +85,21 @@ meter_3 <- ddply(
 final$m3 <- meter_3$V1
 
 # Draw once on the current device for visual feedback then plot in the png device
-compare_utility_meters()
-png(file="test.png", width=480, height=480, units="px")
-compare_utility_meters()
+compare_utility_meters(final$m1, "Kitchen Appliances(Dish Washer, Oven & Microwave)", period)
+file = paste("./pics/", start, "-", end, "-kitchen.png", sep="")
+png(file=file, width=960, height=480, units="px")
+compare_utility_meters(final$m1, "Kitchen Appliances(Dish Washer, Oven & Microwave)", period)
+dev.off()
+
+compare_utility_meters(final$m2, "Laundry Room(Washing Machine, Tumble Drier, Fridge & Light)", period)
+file = paste("./pics/", start, "-", end, "-laundry.png", sep="")
+print(file)
+png(file=file, width=960, height=480, units="px")
+compare_utility_meters(final$m2, "Laundry Room(Washing Machine, Tumble Drier, Fridge & Light)", period)
+dev.off()
+
+compare_utility_meters(final$m3, "Water Heater & Air Conditioner", period)
+file = paste("./pics/", start, "-", end, "-wh_ac.png", sep="")
+png(file=file, width=960, height=480, units="px")
+compare_utility_meters(final$m3, "Water Heater & Air Conditioner", period)
 dev.off()
