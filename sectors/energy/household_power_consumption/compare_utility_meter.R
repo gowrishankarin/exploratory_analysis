@@ -15,10 +15,7 @@ compare_utility_meters <- function(meter, sub, period) {
     title <- ggtitle(bquote(atop(.(main_title), atop(italic(.(sub))), "")))
     
     print(p + title)
-    
-    # Add a legend @ top right corner.
-    #   legend("topright", lwd=1, lty=1, col = c("black", "blue", "red"), box.lwd = 1, 
-    #       legend = c("SM_1", "SM_2", "SM_3"))
+
 }
 
 # Get the cached data laoded through load.R
@@ -48,7 +45,6 @@ new_data <- ddply(
         sum(x$Sub_metering_1)
     }
 )
-
 
 final <- ddply(
     data, 
@@ -84,6 +80,8 @@ meter_3 <- ddply(
     }
 )
 final$m3 <- meter_3$V1
+
+final <- mutate(final, Day = weekdays(Date))
 
 # Draw once on the current device for visual feedback then plot in the png device
 compare_utility_meters(final$m1, "Kitchen Appliances(Dish Washer, Oven & Microwave)", period)

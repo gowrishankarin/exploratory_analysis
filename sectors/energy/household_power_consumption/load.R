@@ -53,6 +53,7 @@ load <- function(file = "household_power_consumption.txt") {
     new_data <- mutate(new_data, Date = as.Date(Date, format="%d/%m/%Y"), 
         DateTime = fast_strptime(DateTime, format="%d/%m/%Y %H:%M:%S"))
     
+    
     # Acquire meter data for specific dates
     #new_data <- filter(new_data, Date >= as.Date("2007-01-01") & 
     #    Date <= as.Date("2007-12-30"))    
