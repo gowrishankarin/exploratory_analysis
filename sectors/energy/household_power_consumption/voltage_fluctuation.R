@@ -1,6 +1,6 @@
 analyse_voltage_fluctuation <- function() {
     
-    p1 <- qplot(x = V1, data = final, xlab = "Voltage", ylab = "Frequency") + 
+    p1 <- ggplot(aes(x = V1), data = final, xlab = "Voltage", ylab = "Frequency") + 
         geom_histogram(fill = "peachpuff", color = "grey", binwidth = 0.5) +
         coord_cartesian(xlim = c(x.min-1, x.max+1)) + 
         ggtitle(paste("Voltage Fluctuation (rounded to 0.5 volt)", period)) +
@@ -27,12 +27,12 @@ analyse_voltage_fluctuation <- function() {
         geom_text(x = x.median, y = 22, label = paste("Med", round(x.median, digits = 1),
             sep = '\n'), color = "green3")
     
-    p2 <- qplot(x = V1, data = final, xlab = "Voltage", ylab = "Frequency") + 
+    p2 <- ggplot(aes(x = V1), data = final, xlab = "Voltage", ylab = "Frequency") + 
         coord_cartesian(xlim = c(237.5, 244)) +
         geom_histogram(fill = "peachpuff", color = "grey", binwidth = 0.5) +
         ggtitle("Primary Distribution")
     
-    p3 <- qplot(x = V1, data = final, xlab = "Voltage", ylab = "Frequency") + 
+    p3 <- ggplot(aes(x = V1), data = final, xlab = "Voltage", ylab = "Frequency") + 
         coord_cartesian(xlim = c(230.5, 237)) +
         geom_histogram(fill = "pink", color = "grey", binwidth = 0.5) +
         ggtitle("Faulty Distribution")
