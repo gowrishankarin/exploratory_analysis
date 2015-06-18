@@ -5,26 +5,26 @@ analyse_voltage_fluctuation <- function() {
         coord_cartesian(xlim = c(x.min-1, x.max+1)) + 
         ggtitle(paste("Voltage Fluctuation (rounded to 0.5 volt)", period)) +
         geom_vline(xintercept = c(x.p5), color = "brown", alpha = 1) +
-        geom_text(x = x.p5, y = 44, label = paste("5%", round(x.p5, digits = 1), 
+        geom_text(x = x.p5, y = label_location, label = paste("5%", round(x.p5, digits = 1), 
             sep = '\n'), color = "brown") +
         geom_vline(xintercept = c(x.p95), color = "brown", alpha = 1) +
-        geom_text(x = x.p95, y = 44, label = paste("95%", round(x.p95, digits = 1),
+        geom_text(x = x.p95, y = label_location, label = paste("95%", round(x.p95, digits = 1),
             sep = '\n'), color = "brown") +
-        geom_text(x = x.min, y = 44, label = paste("Min", round(x.min, digits=1), 
+        geom_text(x = x.min, y = label_location, label = paste("Min", round(x.min, digits=1), 
             sep='\n'), color = "blue") +
-        geom_text(x = x.max, y = 44, label = paste("Max", round(x.max, digits=1), 
+        geom_text(x = x.max, y = label_location, label = paste("Max", round(x.max, digits=1), 
             sep='\n'), color = "blue") + 
         geom_vline(xintercept = c(x.p25), color = "chocolate3", alpha = 1) +
-        geom_text(x = x.p25, y = 44, label = paste("25%", round(x.p25, digits = 1), 
+        geom_text(x = x.p25, y = label_location, label = paste("25%", round(x.p25, digits = 1), 
             sep = '\n'), color = "chocolate3") +
         geom_vline(xintercept = c(x.p75), color = "chocolate3", alpha = 1) +
-        geom_text(x = x.p75, y = 44, label = paste("75%", round(x.p75, digits = 1),
+        geom_text(x = x.p75, y = label_location, label = paste("75%", round(x.p75, digits = 1),
             sep = '\n'), color = "chocolate3") + 
         geom_vline(xintercept = c(x.mean), color = "red", alpha = 1) +
-        geom_text(x = x.mean, y = 44, label = paste("Ave", round(x.mean, digits = 1),
+        geom_text(x = x.mean, y = label_location, label = paste("Ave", round(x.mean, digits = 1),
             sep = '\n'), color = "red") +
         geom_vline(xintercept = c(x.median), color = "green3", alpha = 1) + 
-        geom_text(x = x.median, y = 22, label = paste("Med", round(x.median, digits = 1),
+        geom_text(x = x.median, y = label_location*0.25, label = paste("Med", round(x.median, digits = 1),
             sep = '\n'), color = "green3")
     
     p2 <- ggplot(aes(x = V1), data = final, xlab = "Voltage", ylab = "Frequency") + 
@@ -50,6 +50,9 @@ print("Data is collected for a period of 4 years between 2007-01-01 and 2010-12-
 
 start_date <- readline("Enter START date in yyyy-mm-dd format(data format not validated): ")
 end_date <- readline("Enter END date in yyyy-mm-dd format(data format not validated): ")
+
+label_location <- readline("Enter location at which the labels to be rendered on the graph: ")
+label_location <- as.numeric(label_location)
 
 start_date <- as.Date(start_date)
 end_date <- as.Date(end_date)
