@@ -38,15 +38,25 @@ getCorrelatedCovariance <- function(corZeroMeanData) {
 }
 
 # Eigen Decomposition
-getTopPrincipleComponent <- function(data = data) {
+getTopPrincipalComponent <- function(data = data) {
     # data: An n dimensional matrix preferabled a centered out one for PCA calc
     
     # Eigen decomposition is performed to get eigen values and eigen vectors.
     # This function returns the top principle components (eigen vector) 
     # corresponding to top eigen values.
     
+    # Step 1: Calculate Eigen Values and Eigen Vectors
+    # Step 2: Find index of max eigen value
+    # Step 3: Return the eigen vector corresponding to max eigen value
+    
     egn <- eigen(data)
-    return(egn$vectors[,which.max(egn$values)])
+    return(egn$vectors[which.max(egn$values),])
+}
+
+getTopNPrincipalComponent <- function(data = data, n = 1) {
+    egn <- eigen(data)
+    sortedEgnVectors <- egn$vectors[order(-egn$values),]
+    return(sortedEgnVectors[1:n,])
 }
 
 # PCA Scores
@@ -58,3 +68,23 @@ getPCAScores <- function(correlatedData, topComponent) {
     
     return(correlatedData %*% topComponent)
 }
+set.seed(142)
+dataCorr <- create2DGaussian(mean = 50, sigma = 1, cov = 0.9, n = 100)
+corrZeroMeanData <- getCorrelatedZeroMeanData(dataCorr)
+corrCovarianceData <- getCorrelatedCovariance(corrZeroMeanData)
+topPrincipalComponent <- getTopPrincipalComponent(corrCovarianceData)
+pcaScores <- getPCAScores(dataCorr, topPrincipalComponent)
+
+print(topPrincipalComponent)
+
+topNPrincipalComponent <- getTopNPrincipalComponent(corrCovarianceData, 3)
+pcaScoresN <- getPCAScores(dataCorr, topNPrincipalComponent)
+
+print(topNPrincipalComponent)
+
+
+
+
+
+
+
